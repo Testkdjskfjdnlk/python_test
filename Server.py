@@ -4,13 +4,14 @@
 
 ### the library import
 import random
+import os
 from flask import Flask,request
 from pymessenger.bot import Bot
 
 
-facebook_verify = 'we'   #the verify token
+facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 ## may need change everytime
-access_token = 'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
+access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
 server = Bot(access_token)
 
 
