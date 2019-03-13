@@ -7,6 +7,13 @@ import random
 import os
 from flask import Flask,request
 from pymessenger.bot import Bot
+import boto3
+
+
+client = boto3(
+    'dynamodb',
+    aws_access_key_id = 'AKIAJUASIBOK57ZUSKEA',
+    aws_secret_access_key = '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')
 
 
 facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
@@ -43,7 +50,7 @@ def recieve_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 user_ID = message['sender']['id']
-                reponse = get_message()
+                reponse = test_get_dynamodb() #get_message()
                 reply_user(user_ID,reponse)
     return "Message Processed"
     
@@ -56,13 +63,13 @@ def recieve_message():
         message = 'Please send text'
         reply_user(user_ID,message)
     '''
-
+'''
 #chooses a random message to send to the user
 def get_message():
     sample_responses = ["Hello!", "Select course.", "Monster_K_O!", "See you"]
     # return selected item to the user
     return random.choice(sample_responses)
-
+'''
 
 
 #### send back message back to user
@@ -77,8 +84,19 @@ def reply_user(user_ID,message):
     server.send_text_message(user_ID,message)
     return 'ok'
 
+# test dynamodb
+def test_get_dynamodb()
+# Connect to aws Dynamobd, get required data
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('Monster_DB')
+
+    response = table.get_item(Key={'Function': 'Basic_courses_information', 'Course': 'COMP9900'}, AttributesToGet=['handbook_link'])
+    print(response)
+    link = response['Item']['handbook_link']
+    return link
 
 if __name__ == '__main__':
+    #print(test_get_dynamodb())
     app.run(debug=True)
 
 
