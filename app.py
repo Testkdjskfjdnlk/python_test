@@ -12,8 +12,8 @@ import boto3
 
 client = boto3(
     'dynamodb',
-    aws_access_key_id = 'AKIAJUASIBOK57ZUSKEA',
-    aws_secret_access_key = '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')
+    aws_access_key_id = os.environ['aws-accesss-id'],
+    aws_secret_access_key = os.environ['aws-access-key'])
 
 
 facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
@@ -85,7 +85,7 @@ def reply_user(user_ID,message):
     return 'ok'
 
 # test dynamodb
-def test_get_dynamodb()
+def test_get_dynamodb():
 # Connect to aws Dynamobd, get required data
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('Monster_DB')
