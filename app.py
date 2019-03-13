@@ -16,6 +16,12 @@ client = boto3(
     aws_secret_access_key = os.environ['aws-access-key'])
 '''
 
+greeting = ['hello','hi','how are you','nice to meet you']
+
+goodbye = ['bye','goodbye','see you','thank you']
+
+
+
 facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 ## may need change everytime
 access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
@@ -40,9 +46,6 @@ def verify_facebook():
 
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
-
-greeting = ['hello','hi','how are you','nice to meet you']
-goodbye = ['bye','goodbye','see you','thank you']
 
 def recieve_message():
     user_input = request.get_json()
