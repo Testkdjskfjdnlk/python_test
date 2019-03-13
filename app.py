@@ -41,6 +41,9 @@ def verify_facebook():
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
 
+greeting = ['hello','hi','how are you','nice to meet you']
+goodbye = ['bye','goodbye','see you','thank you']
+
 def recieve_message():
     user_input = request.get_json()
     #get user ID to response back
@@ -49,8 +52,14 @@ def recieve_message():
           for message in messaging:
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
+                text = message['message'].get('text')
                 user_ID = message['sender']['id']
-                reponse = test_get_dynamodb() #get_message()
+                if text.lower() in greeting:
+                    reponse = 'Nice to meet you!'
+                elif text.lower() in goodbye:
+                    reponse = 'See you next time!'
+                else:
+                    reponse = test_get_dynamodb() #get_message()
                 reply_user(user_ID,reponse)
     return "Message Processed"
     
