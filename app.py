@@ -9,12 +9,12 @@ from flask import Flask,request
 from pymessenger.bot import Bot
 import boto3
 
-
+'''
 client = boto3(
     'dynamodb',
     aws_access_key_id = os.environ['aws-accesss-id'],
     aws_secret_access_key = os.environ['aws-access-key'])
-
+'''
 
 facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 ## may need change everytime
