@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[5]:
-
 import os
 import re
 import string
@@ -88,7 +83,7 @@ def intent_classification(test_text):
             
     
 
-
+'''
 # In[8]:
 
 intent = intent_classification('Who is teaching COMP9321 this semester?')
@@ -96,6 +91,6 @@ print(intent)
 
 
 # In[ ]:
-
+'''
 
 
