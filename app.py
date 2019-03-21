@@ -9,6 +9,9 @@ from flask import Flask,request
 from pymessenger.bot import Bot
 import boto3
 
+import IntentClassification as intent_classify
+import keyword_extraction as keyword_extract
+
 '''
 client = boto3(
     'dynamodb',
@@ -16,9 +19,9 @@ client = boto3(
     aws_secret_access_key = os.environ['aws-access-key'])
 '''
 
-greeting = ['hello','hi','how are you','nice to meet you']
+#greeting = ['hello','hi','how are you','nice to meet you']
 
-goodbye = ['bye','goodbye','see you','thank you']
+#goodbye = ['bye','goodbye','see you','thank you']
 
 
 
@@ -57,12 +60,19 @@ def recieve_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 text = message['message'].get('text')
                 user_ID = message['sender']['id']
+                
+                intent = intent_classify.intent_classification(text)
+                keyword = keyword_extract.keyword_extraction(intent,text)
+                
+                response = 'intent is '+ intent +', keyword is ' + str(keyword)
+                '''
                 if text.lower() in greeting:
                     reponse = 'Nice to meet you!'
                 elif text.lower() in goodbye:
                     reponse = 'See you next time!'
                 else:
                     reponse = test_get_dynamodb() #get_message()
+                '''
                 reply_user(user_ID,reponse)
     return "Message Processed"
     
@@ -75,13 +85,7 @@ def recieve_message():
         message = 'Please send text'
         reply_user(user_ID,message)
     '''
-'''
-#chooses a random message to send to the user
-def get_message():
-    sample_responses = ["Hello!", "Select course.", "Monster_K_O!", "See you"]
-    # return selected item to the user
-    return random.choice(sample_responses)
-'''
+
 
 
 #### send back message back to user
@@ -112,7 +116,4 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-### chatbot process text
-#def chatbot(text):      ####need add
-#    pass
 
