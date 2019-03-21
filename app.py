@@ -73,7 +73,7 @@ def recieve_message():
                 else:
                     reponse = test_get_dynamodb() #get_message()
                 '''
-                reply_user(user_ID,reponse)
+                reply_user(user_ID,response)
     return "Message Processed"
     
     '''
