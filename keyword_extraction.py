@@ -5,9 +5,9 @@ import re
 import pandas as pd
 
 def load_csv(file_name):
-    path = 'C:/Users/lenovo/Desktop/Keyword_extraction/'
+    #path = 'C:/Users/lenovo/Desktop/Keyword_extraction/'
     #files = os.listdir(path)
-    file = path + file_name + '.csv'
+    file = file_name + '.csv'
     #with open(file) as f:
     df = pd.read_csv(file)
     column_headers = list(df.columns.values)
