@@ -64,12 +64,12 @@ def recieve_message():
                 
                 if re_ask == False:
                     intent = intent_classify.intent_classification(text)
-                    if intent == 'Greeting':
-                        reponse = 'Hi, I am here to help you!'
+                    if intent == 'Greetings':
+                        response = 'Hi, I am here to help you!'
                         reply_user(user_ID,response)
                         return "Message Processed"
                     elif intent == 'Goodbye':
-                        reponse = 'See you soon!'
+                        response = 'See you soon!'
                         reply_user(user_ID,response)
                         return "Message Processed"
                 else:
