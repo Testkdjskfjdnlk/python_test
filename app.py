@@ -30,7 +30,8 @@ facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
 server = Bot(access_token)
 
-
+re_ask = False
+re_intent = ''
 
 app = Flask(__name__)
 #api = Api(app,default = "COMP9900",title ="X_Bot")
@@ -61,18 +62,28 @@ def recieve_message():
                 text = message['message'].get('text')
                 user_ID = message['sender']['id']
                 
-                intent = intent_classify.intent_classification(text)
-                keyword = keyword_extract.keyword_extraction(intent,text)
+                if re_ask == False:
+                    intent = intent_classify.intent_classification(text)
+                    if intent = 'Greeting':
+                        reponse = 'Hi, I am here to help you!'
+                        reply_user(user_ID,response)
+                        return "Message Processed"
+                    elif intent = 'Goodbye':
+                        reponse = 'See you soon!'
+                        reply_user(user_ID,response)
+                        return "Message Processed"
+                 else：
+                    intent = re_intent
+                 keyword = keyword_extract.keyword_extraction(intent,text)
+                 '''
+                 response = 
+                 if response = 'More infor about courses':
+                     re_ask = True
+                     re_intent = intent
+                 '''
                 
                 response = 'intent is '+ intent +', keyword is ' + str(keyword)
-                '''
-                if text.lower() in greeting:
-                    reponse = 'Nice to meet you!'
-                elif text.lower() in goodbye:
-                    reponse = 'See you next time!'
-                else:
-                    reponse = test_get_dynamodb() #get_message()
-                '''
+                
                 reply_user(user_ID,response)
     return "Message Processed"
     
