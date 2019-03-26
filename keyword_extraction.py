@@ -4,7 +4,7 @@ import csv
 import re
 import pandas as pd
 
-def load_csv(file_name):
+def load_csv(file_name):        ##### rewrite for loading data from aws
     #path = 'C:/Users/lenovo/Desktop/Keyword_extraction/'
     #files = os.listdir(path)
     file = file_name + '.csv'
