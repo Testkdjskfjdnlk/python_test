@@ -64,11 +64,11 @@ def recieve_message():
                 
                 if re_ask == False:
                     intent = intent_classify.intent_classification(text)
-                    if intent = 'Greeting':
+                    if intent == 'Greeting':
                         reponse = 'Hi, I am here to help you!'
                         reply_user(user_ID,response)
                         return "Message Processed"
-                    elif intent = 'Goodbye':
+                    elif intent == 'Goodbye':
                         reponse = 'See you soon!'
                         reply_user(user_ID,response)
                         return "Message Processed"
@@ -77,7 +77,7 @@ def recieve_message():
                  keyword = keyword_extract.keyword_extraction(intent,text)
                  '''
                  response = 
-                 if response = 'More infor about courses':
+                 if response == 'More infor about courses':
                      re_ask = True
                      re_intent = intent
                  '''
