@@ -72,7 +72,7 @@ def recieve_message():
                         reponse = 'See you soon!'
                         reply_user(user_ID,response)
                         return "Message Processed"
-                else：
+                else:
                     intent = re_intent
                 keyword = keyword_extract.keyword_extraction(intent,text)
                 '''
