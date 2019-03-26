@@ -25,14 +25,26 @@ related = ['relative','related','prerequisite','co-related','correlated','exclus
 other = {'staff':staff,'location':location,'time':time,'outline':outline,'handbook':handbook,'related':related}
 
 def keyword_extraction(intent,sentence):
+    '''
     if intent != 'Stream course recommendation':
         file = 'courses'
     else:
         file = intent
-    courses = load_csv(file)
+    '''
     sentence = sentence.lower().replace("+", "#")
     print(sentence)
-    output = {'intent':intent,'course':[],'stream':[],'staff':[],'loctation':[],'time':[],'outline':[],'handbook':[],'related':[]}
+    output = {'intent':intent,'course':[],'stream_name':[],'staff':[],'loctation':[],'time':[],'outline':[],'handbook':[],'related':[]}
+    
+    courses = load_csv('courses')
+    if intent == 'Stream course recommendation':
+        steam_name = load_csv('Stream course recommendation')
+        for i in list(steam_name.keys()):
+            for j in steam_name[i]:
+                patt=r'{}'.format(j.lower())
+                pattern = re.compile(patt)
+                result = pattern.findall(sentence)
+                if result != []:
+                    output[i].append(j)
     #keys = {intent}
     for i in list(courses.keys()):
         for j in courses[i]:
