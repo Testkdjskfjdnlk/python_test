@@ -31,8 +31,8 @@ facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
 server = Bot(access_token)
 
-re_ask = False
-re_intent = ''
+global re_ask = False
+global re_intent = ''
 
 app = Flask(__name__)
 #api = Api(app,default = "COMP9900",title ="X_Bot")
@@ -53,6 +53,8 @@ def verify_facebook():
 @app.route('/',methods = ['POST'])
 
 def recieve_message():
+    global re_ask
+    global re_intent
     user_input = request.get_json()
     #get user ID to response back
     for event in user_input['entry']:
