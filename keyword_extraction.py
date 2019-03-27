@@ -36,15 +36,15 @@ def keyword_extraction(intent,sentence):
     output = {'intent':intent,'course':[],'stream_name':[],'staff':[],'loctation':[],'time':[],'outline':[],'handbook':[],'related':[]}
     
     courses = load_csv('courses')
-    if intent == 'Stream course recommendation':
-        steam_name = load_csv('Stream course recommendation')
-        for i in list(steam_name.keys()):
-            for j in steam_name[i]:
-                patt=r'{}'.format(j.lower())
-                pattern = re.compile(patt)
-                result = pattern.findall(sentence)
-                if result != []:
-                    output[i].append(j)
+    #if intent == 'Stream course recommendation':
+    steam_name = load_csv('Stream course recommendation')
+    for i in list(steam_name.keys()):
+        for j in steam_name[i]:
+            patt=r'{}'.format(j.lower())
+            pattern = re.compile(patt)
+            result = pattern.findall(sentence)
+            if result != []:
+                output[i].append(j)
     #keys = {intent}
     for i in list(courses.keys()):
         for j in courses[i]:
