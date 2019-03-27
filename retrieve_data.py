@@ -148,12 +148,12 @@ def stream_courses_rec(epic1_return):
  ### course planning
  def course_planning(epic1_return):
     info = ''
-
     code_list = epic1_return['course']
     if code_list == []:
         return 'Please provide courses code.'
-    
     info += 'We not implement this function yet, sorry.'
+    
+    return info
     '''
     # ####################################################
     # # de-dupilcation
@@ -172,7 +172,6 @@ def stream_courses_rec(epic1_return):
             info += ' '+rel + ','
         info += '\n'
     '''
-    return info
 
 ### time clash check
 def clash_check(epic1_return):
