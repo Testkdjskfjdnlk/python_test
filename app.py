@@ -11,6 +11,7 @@ import boto3
 
 import IntentClassification as intent_classify
 import keyword_extraction as keyword_extract
+import retrieve_data as retrieve
 
 '''
 client = boto3(
@@ -75,14 +76,13 @@ def recieve_message():
                 else:
                     intent = re_intent
                 keyword = keyword_extract.keyword_extraction(intent,text)
-                '''
-                response = 
-                if response == 'More infor about courses':
+                response = retrieve.retrieval_func(keyword)
+                if response == 'Please provide courses code.' or response == 'please provide stream name.': 
                     re_ask = True
                     re_intent = intent
-                '''
                 
-                response = 'intent is '+ intent +', keyword is ' + str(keyword)
+                
+                #response = 'intent is '+ intent +', keyword is ' + str(keyword)
                 
                 reply_user(user_ID,response)
     return "Message Processed"
@@ -111,6 +111,7 @@ def reply_user(user_ID,message):
     server.send_text_message(user_ID,message)
     return 'ok'
 
+'''
 # test dynamodb
 def test_get_dynamodb():
 # Connect to aws Dynamobd, get required data
@@ -121,6 +122,7 @@ def test_get_dynamodb():
     print(response)
     link = response['Item']['handbook_link']
     return link
+'''
 
 if __name__ == '__main__':
     #print(test_get_dynamodb())
