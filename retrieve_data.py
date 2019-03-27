@@ -145,8 +145,8 @@ def stream_courses_rec(epic1_return):
     return list(reco-set(code_list))'''
     
  
- ### course planning
- def course_planning(epic1_return):
+### course planning
+def course_planning(epic1_return):
     info = ''
     code_list = epic1_return['course']
     if code_list == []:
