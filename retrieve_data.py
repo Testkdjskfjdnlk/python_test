@@ -210,9 +210,9 @@ def retrieval_func(epic1):
     response = 'eorro'
     if epic1['intent'] == 'Graduate requirements':
         response = graduate_req(epic1)
-    elif epic1['intent'] ==  'Stream courses recommendation':
+    elif epic1['intent'] ==  'Stream course recommendation':
         response = stream_courses_rec(epic1)
-    elif epic1['intent'] == 'Timetable clash':
+    elif epic1['intent'] == 'Time clash checking':
         response =  clash_check(epic1)
     elif epic1['intent'] == 'Course planning':
         response = course_planning(epic1)
