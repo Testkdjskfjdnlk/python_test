@@ -81,9 +81,6 @@ def recieve_message():
                     re_ask = True
                     re_intent = intent
                 
-                
-                #response = 'intent is '+ intent +', keyword is ' + str(keyword)
-                
                 reply_user(user_ID,response)
     return "Message Processed"
     
