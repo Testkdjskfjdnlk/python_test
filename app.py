@@ -82,9 +82,9 @@ def recieve_message():
                 if response == 'Please provide courses code.' or response == 'please provide stream name.': 
                     re_ask = True
                     re_intent = intent
-                response = intent + ' ' + response
+                res = intent + ' ' + response + ' ' + str(re_ask)
                 
-                reply_user(user_ID,response)
+                reply_user(user_ID,res)
     return "Message Processed"
     
     '''
