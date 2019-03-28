@@ -32,7 +32,9 @@ access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGqu
 server = Bot(access_token)
 
 re_ask = False
+global re_ask
 re_intent = ''
+global re_intent
 
 app = Flask(__name__)
 #api = Api(app,default = "COMP9900",title ="X_Bot")
