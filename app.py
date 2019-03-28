@@ -31,10 +31,11 @@ facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 access_token = os.environ['access_token'] #'EAADkSAAGGFcBANBEhgqBQ1nV1obaMJ5iGquSbZA6kHQh28vJjrkiKhgwjwQ67DlqQ4hTiZBSfNpiuBRsYJmYTZCrxZBkt9NU8vZCZCtVMZAhigS3UsSIfgmqTB7Vu0DhNqCEQOcqApZBHWbrcvjqCwCXZAJAEeDN5DK12kEvfUeTk7QZDZD'    #the access token
 server = Bot(access_token)
 
-re_ask = False
 global re_ask
-re_intent = ''
+re_ask = False
 global re_intent
+re_intent = ''
+
 
 app = Flask(__name__)
 #api = Api(app,default = "COMP9900",title ="X_Bot")
