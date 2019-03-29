@@ -9,14 +9,16 @@ from sklearn import preprocessing
 from sklearn.externals import joblib
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+from textblob import TextBlob
 
 MAX_SEQUENCE_LENGTH = 50
 
 
-# In[6]:
+# In[21]:
 
 def preprocessing(text):
     text = text.translate(string.punctuation)
+    text = text.lower()
     text = re.sub(r"[^A-Za-z0-9^,!.\/'+-=]", " ", text)
     text = re.sub(r"what's", "what is ", text)
     text = re.sub(r"\'s", " ", text)
@@ -45,12 +47,14 @@ def preprocessing(text):
     text = re.sub(r"e - mail", "email", text)
     text = re.sub(r"j k", "jk", text)
     text = re.sub(r"\s{2,}", " ", text)
-    text = text.lower()
+    text = text.replace('requirements','requirement')
+    text = text.replace('recommendations', 'recommendation')
+    text = text.replace('streams', 'stream')
+    text = text.replace('specialisations','specialisation')
     return text
-    
 
 
-# In[7]:
+# In[22]:
 
 def intent_classification(test_text):
 
