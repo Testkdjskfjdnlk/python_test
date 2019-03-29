@@ -9,7 +9,7 @@ from sklearn import preprocessing
 from sklearn.externals import joblib
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from textblob import TextBlob
+
 
 MAX_SEQUENCE_LENGTH = 50
 
