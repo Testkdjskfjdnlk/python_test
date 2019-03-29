@@ -201,7 +201,7 @@ def clash_check(epic1_return):
                     info += course + ' and ' + other
                     info += 'has clash in Term ' + t + ' in ' + result + '\n'
     if info == '':
-        print(epic1_return['course'])
+        #print(epic1_return['course'])
         info += 'There is no clash between ' + ' and '.join(epic1_return['course']) + '\n'
             
     return info
