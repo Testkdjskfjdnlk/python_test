@@ -69,7 +69,9 @@ def recieve_message():
                 user_ID = message['sender']['id']
                 
                 if re_ask == False:
-                    intent = intent_classify.intent_classification(text)
+                    new_text = TextBlob(text).correct()
+                    new_text = str(new_text)
+                    intent = intent_classify.intent_classification(new_text)
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
                         reply_user(user_ID,response)
