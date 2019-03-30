@@ -98,6 +98,7 @@ def recieve_message():
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['course'] != []:
                             store[user_ID]['keyword']['intent'] = intent
+                            print(store[user_ID]['keyword'])
                             response = retrieve.retrieval_func(store[user_ID]['keyword'])
                     else:
                         store[user_ID]['re_ask'] = True
@@ -106,6 +107,7 @@ def recieve_message():
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
                             store[user_ID]['keyword']['intent'] = intent
+                            print(store[user_ID]['keyword'])
                             response = retrieve.retrieval_func(store[user_ID]['keyword'])
                     else:
                         store[user_ID]['re_ask'] = True
