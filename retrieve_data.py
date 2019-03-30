@@ -76,26 +76,29 @@ def basic_courses_info(epic1_return):
     courses = course_info.loc[code_list].T.to_dict()
     
     for course in courses:
-        info += course + 'info are: \n'
-        if handbook != []:
-            info += 'Handbook link is: ' + courses[course]['handbook link'] +' \n'
-        if outline != []:
-            info += 'Outline link is: '+ courses[course]['outline link']+',' + 'outline is: ' + courses[course]['outline text']+' \n'
-        if timetable != []:
-            info += 'Time link is: ' + courses[course]['timetable link']+',' + 'timetable is: ' + str(courses[course]['timetable'])+' \n'
-        if staff != []:
-            info += 'staff is: '+ str(courses[course]['staff']) + ' \n'
-        if location != []:
-            info += 'location is: '+ str(courses[course]['location']) + ' \n'
-        if related != []:
-            if courses[course]['prerequisite'] == 'N/a':
-                info += 'There is no prerequisite course'+ ' \n'
-            else:
-                info += courses[course]['prerequisite'] + ' \n'
-            if courses[course]['exclusion list'] == []:
-                info += 'There is no exclusion course'+ ' \n'
-            else:
-                info += ' '.join(courses[course]['prerequisite']) + ' \n'
+        if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == []:
+            info += course + ' basic infor is ' + courses[course]['handbook link'] +' \n'
+        else:
+            info += course + ' info are: \n'
+            if handbook != []:
+                info += 'Handbook link is: ' + courses[course]['handbook link'] +' \n'
+            if outline != []:
+                info += 'Outline link is: '+ courses[course]['outline link']+',' + 'outline is: ' + courses[course]['outline text']+' \n'
+            if timetable != []:
+                info += 'Time link is: ' + courses[course]['timetable link']+',' + 'timetable is: ' + str(courses[course]['timetable'])+' \n'
+            if staff != []:
+                info += 'staff is: '+ str(courses[course]['staff']) + ' \n'
+            if location != []:
+                info += 'location is: '+ str(courses[course]['location']) + ' \n'
+            if related != []:
+                if courses[course]['prerequisite'] == 'N/a':
+                    info += 'There is no prerequisite course'+ ' \n'
+                else:
+                    info += courses[course]['prerequisite'] + ' \n'
+                if courses[course]['exclusion list'] == []:
+                    info += 'There is no exclusion course'+ ' \n'
+                else:
+                    info += ' '.join(courses[course]['prerequisite']) + ' \n'
     
     return info
     
