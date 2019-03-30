@@ -69,11 +69,11 @@ def recieve_message():
                 
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
-                    store[user_ID] = {'re_intent':'', 'keyword':{}, 're_ask': Flase, 'time': sent_time}
+                    store[user_ID] = {'re_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time}
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'intent':'','keyword':{}, 're_ask': Flase, 'time': sent_time}
+                        store[user_ID] = {'intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
                     else:
                         store[user_ID]['time'] = sent_time
                 
