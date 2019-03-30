@@ -14,7 +14,7 @@ import IntentClassification as intent_classify
 import keyword_extraction as keyword_extract
 import retrieve_data as retrieve
 
-#import time
+import time
 
 
 facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
@@ -22,16 +22,17 @@ facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 access_token = os.environ['access_token']    #the access token
 server = Bot(access_token)
 
+'''
 global re_ask
 re_ask = False
 global re_intent
 re_intent = ''
-
 '''
+
 # store the key info by user id
 global store
 store = {}   # store = {'id':{'re_intent':'','keyword':{}, 're_ask': Flase, 'time': float}}
-'''
+
 
 
 app = Flask(__name__)
@@ -53,9 +54,9 @@ def verify_facebook():
 @app.route('/',methods = ['POST'])
 
 def recieve_message():
-    global re_ask
-    global re_intent
-    #global store
+    #global re_ask
+    #global re_intent
+    global store
     user_input = request.get_json()
     #get user ID to response back
     for event in user_input['entry']:
@@ -65,7 +66,7 @@ def recieve_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 text = message['message'].get('text')
                 user_ID = message['sender']['id']
-                '''
+                
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
                     store[user_ID] = {'re_intent':'', 'keyword':{}, 're_ask': Flase, 'time': sent_time}
@@ -111,6 +112,7 @@ def recieve_message():
                         store[user_ID]['re_intent'] = intent
                 else:
                     store[user_ID]['re_ask'] = False
+                    store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
                 
                 res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
@@ -143,19 +145,9 @@ def recieve_message():
                 res = intent + ' ' + response + ' ' + str(re_ask)
                 
                 reply_user(user_ID,res)
+                '''
     return "Message Processed"
     
-    '''
-    #check content sent by user
-    if data.get('text'):    # if user sent text
-        text = data.get('text')
-        chatbot_process(text)  ###########################   modify need
-    else:  #is user sent nontext
-        message = 'Please send text'
-        reply_user(user_ID,message)
-    '''
-
-
 
 #### send back message back to user
 def reply_user(user_ID,message):
