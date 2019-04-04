@@ -106,7 +106,7 @@ def basic_courses_info(epic1_return):
     
     table = get_table()
     for course in code_list:
-        info += course + 'info are: \n'
+        info += course + ' info are: \n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
         if handbook != []:
             info += 'Handbook link is: ' + items['handbook link'] +' \n'
