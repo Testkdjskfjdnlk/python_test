@@ -2,7 +2,13 @@ import boto3
 import pandas as pd
 import copy
 import datetime
+from boto3.dynamodb.conditions import *
 
+def get_table():
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('Monster_DB')
+    return table
+'''
 stream = []
 course = []
 #other = []
@@ -24,7 +30,7 @@ stream_info.set_index(["Course"], inplace=True)
 
 course_info = pd.DataFrame(course)
 course_info.set_index(["Course"], inplace=True)
-
+'''
 #### graduate requirements
 def graduate_req(epic1_return):
     ADK_nb = 0
@@ -36,70 +42,94 @@ def graduate_req(epic1_return):
     if code_list == []:
         return 'Please provide courses code.'
     
-    courses = course_info.loc[code_list].T.to_dict()
-    #print(courses)
-    for course in courses:
-        #print(course)
-        if courses[course]['is ADK'] == 'Yes':
+    table = get_table()
+    for course in code_list:
+        items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
+        if items['is ADK'] == 'Yes':
             ADK_nb += 1
-
-        if courses[course]['is project'] == 'Yes':
+        if items['is project'] == 'Yes':
             nb_projects += 1
-        total_units += int(courses[course]['units'])
+        total_units += int(items['units'])
     
-
+    info = ''
 
     if ADK_nb < 6:
-        return f'No, you need more {6-ADK_nb} 6-units ADK courses to meet the graduation requirement.'
+        info += 'No, you need more ' + str(6-ADK_nb)+' 6-units ADK courses to meet the graduation requirement.\n'
+        
     if total_units < 96:
-        return f'No, you need to get {96 - total_units} more units to meet the graduate requirement.'
+        info += 'You also need to get '+str(96 - total_units)+' more units to meet the graduate requirement.\n'
+        
     if nb_projects < 1:
-        return 'No, you must enroll at least 1 project.'
+        info += 'You also must enroll at least 1 project.\n'
+        
+    if info == '':
+        return 'Yes, congradulations!'
+    else:
+        return info
 
-    return 'Yes, congradulations!'
-    
-  
+### print fixed format infor    
+def print_term_info(label,term):
+    info = ''
+    if label == 'timetable':
+        for t in term.keys():
+            if term[t] != {}:
+                info += 'Term '+ t + ' has '
+                for i in term[t].keys():
+                    info += ' , '.join(term[t][i]) + ' in '+ i + ','
+                info = info[:len(info)-1]
+                info += '\n'
+            else:
+                info += 'Term '+ t + ' has not this course.\n'
+    else:
+        for t in term.keys():
+            if term[t] != 'N/a':
+                info += term[t] + ' in Term ' + t + '\n'
+            else:
+                info += 'Term '+ t + ' has no this course.\n'
+    return info
+
+
 #### find basic course information
 def basic_courses_info(epic1_return):
+    code_list = epic1_return['course']
+    if code_list == []:
+        return 'Please provide courses code.'
+    
     info = ''
     handbook = epic1_return['handbook']
     timetable = epic1_return['time']
     outline = epic1_return['outline']
-    staff = epic1_return['staff']     #### need add 
+    staff = epic1_return['staff']     
     location = epic1_return['location']
-    code_list = epic1_return['course']
-    related = epic1_return['related']    ### database data type question ????
+    related = epic1_return['related']    
     
-    if code_list == []:
-        return 'Please provide courses code.'
     
-    courses = course_info.loc[code_list].T.to_dict()
-    
-    for course in courses:
-        if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == []:
-            info += course + ' basic infor is ' + courses[course]['handbook link'] +' \n'
-        else:
-            info += course + ' info are: \n'
-            if handbook != []:
-                info += 'Handbook link is: ' + courses[course]['handbook link'] +' \n'
-            if outline != []:
-                info += 'Outline link is: '+ courses[course]['outline link']+',' + 'outline is: ' + courses[course]['outline text']+' \n'
-            if timetable != []:
-                info += 'Time link is: ' + courses[course]['timetable link']+',' + 'timetable is: ' + str(courses[course]['timetable'])+' \n'
-            if staff != []:
-                info += 'staff is: '+ str(courses[course]['staff']) + ' \n'
-            if location != []:
-                info += 'location is: '+ str(courses[course]['location']) + ' \n'
-            if related != []:
-                if courses[course]['prerequisite'] == 'N/a':
-                    info += 'There is no prerequisite course'+ ' \n'
-                else:
-                    info += courses[course]['prerequisite'] + ' \n'
-                if courses[course]['exclusion list'] == []:
-                    info += 'There is no exclusion course'+ ' \n'
-                else:
-                    info += ' '.join(courses[course]['prerequisite']) + ' \n'
-    
+    table = get_table()
+    for course in code_list:
+        info += course + 'info are: \n'
+        items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
+        if handbook != []:
+            info += 'Handbook link is: ' + items['handbook link'] +' \n'
+        if outline != []:
+            info += 'Outline link is: '+ items['outline link']+',' + 'outline is: ' + items['outline text']+' \n'
+        if timetable != []:
+            time_info = print_term_info('timetable',items['timetable'])
+            info += 'Time link is: ' + items['timetable link']+',' + 'timetable is: ' + time_info
+        if staff != []:
+            staff_info = print_term_info('staff',items['staff'])
+            info += 'staff is: '+ staff_info
+        if location != []:
+            loc_info = print_term_info('location',items['location'])
+            info += 'location is: '+loc_info
+        if related != []:
+            if items['prerequisite'] == 'N/a':
+                info += 'There is no prerequisite course'+ ' \n'
+            else:
+                info += items['prerequisite'] + ' \n'
+            if items['exclusion list'] == []:
+                info += 'There is no exclusion course'+ ' \n'
+            else:
+                info += ' '.join(items['prerequisite']) + ' \n'    
     return info
     
 ### stream rec
@@ -107,42 +137,41 @@ def stream_courses_rec(epic1_return):
     stream_name = epic1_return['stream_name']
     if stream_name == []:
         return 'please provide stream name.'
-    info = ''
     
-    streams = stream_info.loc[stream_name].T.to_dict()
     code_list = epic1_return['course']
+    
+    info = ''
+    table = get_table()
     if code_list == []:
-        for stream in streams:
-            courses_list = streams[stream]['stream courses list']
+        for stream in stream_name:
+            courses_list = table.scan(FilterExpression = Attr('Course').eq(stream) & Attr('Function').eq('Specialisations'))['Items'][0]['stream courses list']
             info += stream + ' has these courses that you can choose ' + ' '.join(courses_list) + '\n'
     else:
-        for stream in streams:
-            courses_list = list(set(streams[stream]['stream courses list'])-set(code_list))
+        for stream in stream_name:
+            courses_list = list(set(table.scan(FilterExpression = Attr('Course').eq(stream) & Attr('Function').eq('Specialisations'))['Items'][0]['stream courses list']) - set(code_list)) 
             info += stream + ' has these courses that you can choose ' + ' '.join(courses_list) + '\n'
-    
     return info
     
  
 ### course planning
 def course_planning(epic1_return):
-    info = ''
+    
     code_list = epic1_return['course']
     if code_list == []:
         return 'You can choose basic courses like COMP9021, COMP9020, COMP9311, GSOE9820.'
-    courses = course_info.loc[code_list].T.to_dict()
-
-    for course in courses:
-        #print(course)
-        if courses[course]['prerequisite'] != 'N/a':
+    info = ''
+    table = get_table()
+    for course in code_list:
+        items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
+        if items['prerequisite'] != 'N/a':
             info += 'For ' + course + ' you can choose: '
-            info += courses[course]['prerequisite'] +'\n'
+            info += items['prerequisite'] +'\n'
         else:
-            if courses[course]['exclusion list'] != []:
+            if items['exclusion list'] != []:
                 info += 'For ' + course + ' you can choose: \n'
-                info += 'Exclusions: ' + ' '.join(courses[course]['exclusion list']) + '\n'
+                info += 'Exclusions: ' + ' '.join(items['exclusion list']) + '\n'
             else:
                 info += 'There is no related course with ' + course + '\n'
-    
     return info
 
 ### time clash check
@@ -191,13 +220,12 @@ def clash_check(epic1_return):
         return 'Ther is no clash for one course.'
     
     info = ''
-    
-    times = course_info.loc[code_list,['timetable']].T.to_dict()
+    table = get_table()
     for course in code_list:
-        timetable = times[course]['timetable']
+        timetable = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]['timetable']
         code_list.remove(course)
         for other in code_list:
-            other_timetable = times[other]['timetable']
+            other_timetable = table.scan(FilterExpression = Attr('Course').eq(other) & Attr('Function').eq('Courses'))['Items'][0]['timetable']
             for t in timetable:
                 result = check_time(timetable[t],other_timetable[t])
                 if result != '':
@@ -206,7 +234,7 @@ def clash_check(epic1_return):
     if info == '':
         #print(epic1_return['course'])
         info += 'There is no clash between ' + ' and '.join(epic1_return['course']) + '\n'
-            
+    
     return info
     
     
