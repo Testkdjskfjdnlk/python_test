@@ -31,7 +31,7 @@ re_intent = ''
 
 # store the key info by user id
 global store
-store = {}   # store = {'id':{'re_intent':'','keyword':{}, 're_ask': Flase, 'time': float}}
+store = {}   # store = {'id':{'input': '','re_intent':'','keyword':{}, 're_ask': Flase, 'time': float}}
 
 
 
@@ -49,6 +49,8 @@ def verify_facebook():
         return request.args.get("hub.challenge")
     return 'Can not match Facebook verification!'
 
+button = [{'types':'postback', 'Title': 'Yes','payload': 'It helps me!'}, {'types':'postback', 'Title': 'No','payload': 'It does no help!'}]
+feedback = 'Does this response help you?'
 
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
@@ -61,9 +63,17 @@ def recieve_message():
     #get user ID to response back
     for event in user_input['entry']:
           messaging = event['messaging']
-          for message in messaging:
+          for message in messaging: 
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
+                '''
+                if message['message'].get('attachments'):
+                    feedback_ans = message['message']['attachments']['payload']
+                    if feedback_ans == 'It helps me!':
+                        #### put user stored input and intent into model
+                    else:
+                        ### ignore
+                '''
                 text = message['message'].get('text')
                 user_ID = message['sender']['id']
                 
@@ -104,6 +114,8 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
+                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    #server.send_text_message(user_ID,res)
                 elif response == 'please provide stream name.':
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
@@ -114,14 +126,22 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
+                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    #server.send_text_message(user_ID,res)
                 else:
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
+                    
+                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    #server.send_text_message(user_ID,res)
+                    ####send feed back
+                    #server.send_button_message(user_ID,feedback,button)
+                    
                 
                 res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                 
-                reply_user(user_ID,res)
+                server.send_text_message(user_ID,res)
                 '''
                 
                 if re_ask == False:
@@ -152,7 +172,7 @@ def recieve_message():
                 '''
     return "Message Processed"
     
-
+'''
 #### send back message back to user
 def reply_user(user_ID,message):
     '''
@@ -164,7 +184,7 @@ def reply_user(user_ID,message):
     '''
     server.send_text_message(user_ID,message)
     return 'ok'
-
+'''
 
 if __name__ == '__main__':
     #print(test_get_dynamodb())
