@@ -22,12 +22,6 @@ facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
 access_token = os.environ['access_token']    #the access token
 server = Bot(access_token)
 
-'''
-global re_ask
-re_ask = False
-global re_intent
-re_intent = ''
-'''
 
 # store the key info by user id
 global store
@@ -83,7 +77,7 @@ def recieve_message():
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
+                        store[user_ID] = {'re_intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
                     else:
                         store[user_ID]['time'] = sent_time
                 
@@ -94,11 +88,11 @@ def recieve_message():
                     
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
-                        reply_user(user_ID,response)
+                        server.send_text_message(user_ID,response)
                         return "Message Processed"
                     elif intent == 'Goodbye':
                         response = 'See you soon!'
-                        reply_user(user_ID,response)
+                        server.send_text_message(user_ID,response)
                         return "Message Processed"
                 else:
                     intent = store[user_ID]['re_intent']
