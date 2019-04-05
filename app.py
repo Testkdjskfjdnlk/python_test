@@ -169,13 +169,13 @@ def recieve_message():
 '''
 #### send back message back to user
 def reply_user(user_ID,message):
-    '''
+    
     response = {
         'recipient': {'id': user_ID},
         'message': {'text': message}
         }
     send = request.post("https://graph.facebook.com/v2.6/me/messages?access_token=" + access_token, json = response)
-    '''
+    
     server.send_text_message(user_ID,message)
     return 'ok'
 '''
