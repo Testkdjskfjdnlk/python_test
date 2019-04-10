@@ -65,11 +65,11 @@ def recieve_message():
                 
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
-                    store[user_ID] = {'re_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time}
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'re_intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
+                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
                     else:
                         store[user_ID]['time'] = sent_time
                 
@@ -77,6 +77,7 @@ def recieve_message():
                     new_text = TextBlob(text).correct()
                     new_text = str(new_text)
                     intent = intent_classify.intent_classification(new_text)
+                    
                     
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
@@ -86,12 +87,15 @@ def recieve_message():
                         response = 'See you soon!'
                         server.send_text_message(user_ID,response)
                         return "Message Processed"
-                    keyword = keyword_extract.keyword_extraction(intent,text)
+                    
+                    store[user_ID]['input'] = text
+                    
                 else:
                     print(store[user_ID])
                     intent = store[user_ID]['re_intent']
-                    keyword = store[user_ID]['keyword']
+                    text = store[user_ID]['input'] + ' ' + text
                 
+                keyword = keyword_extract.keyword_extraction(intent,text)
                 response = retrieve.retrieval_func(keyword)
                 if response == 'Please provide courses code.':
                     
@@ -107,7 +111,7 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                        store[user_ID]['keyword'] = keyword
+                        
                         print(store[user_ID])
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
@@ -124,7 +128,7 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                        store[user_ID]['keyword'] = keyword
+                        
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 else:
