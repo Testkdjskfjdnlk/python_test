@@ -91,10 +91,11 @@ def recieve_message():
                 keyword = keyword_extract.keyword_extraction(intent,text)
                 response = retrieve.retrieval_func(keyword)
                 if response == 'Please provide courses code.':
+                    print(store[user_ID])
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['course'] != []:
                             store[user_ID]['keyword']['intent'] = intent
-                            print(store[user_ID]['keyword'])
+                            #print(store[user_ID]['keyword'])
                             keyword['course'] = store[user_ID]['keyword']['course']
                             response = retrieve.retrieval_func(keyword)
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
@@ -105,10 +106,11 @@ def recieve_message():
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 elif response == 'please provide stream name.':
+                    print(store[user_ID])
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
                             store[user_ID]['keyword']['intent'] = intent
-                            print(store[user_ID]['keyword'])
+                            #print(store[user_ID]['keyword'])
                             keyword['stream_name'] = store[user_ID]['keyword']['stream_name']
                             response = retrieve.retrieval_func(keyword)
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
