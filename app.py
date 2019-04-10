@@ -44,7 +44,6 @@ def verify_facebook():
     return 'Can not match Facebook verification!'
 
 button = [{'type':'postback', 'title': 'It helps me!','payload': 'Yes'}, {'type':'postback', 'title': 'It does no help!','payload': 'No'}]
-feedback = 'Does this response help you?'
 
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
@@ -98,11 +97,13 @@ def recieve_message():
                             print(store[user_ID]['keyword'])
                             keyword['course'] = store[user_ID]['keyword']['course']
                             response = retrieve.retrieval_func(keyword)
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_button_message(user_ID,res,button)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    server.send_text_message(user_ID,res)
+                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                        server.send_text_message(user_ID,res)
                 elif response == 'please provide stream name.':
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
@@ -110,11 +111,13 @@ def recieve_message():
                             print(store[user_ID]['keyword'])
                             keyword['stream_name'] = store[user_ID]['keyword']['stream_name']
                             response = retrieve.retrieval_func(keyword)
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_button_message(user_ID,res,button)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    server.send_text_message(user_ID,res)
+                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                        server.send_text_message(user_ID,res)
                 else:
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
