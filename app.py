@@ -60,14 +60,7 @@ def recieve_message():
           for message in messaging: 
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
-                '''
-                if message['message'].get('attachments'):
-                    feedback_ans = message['message']['attachments']['payload']
-                    if feedback_ans == 'It helps me!':
-                        #### put user stored input and intent into model
-                    else:
-                        ### ignore
-                '''
+                
                 text = message['message'].get('text')
                 user_ID = message['sender']['id']
                 
@@ -108,8 +101,8 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    #server.send_text_message(user_ID,res)
+                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    server.send_text_message(user_ID,res)
                 elif response == 'please provide stream name.':
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
@@ -120,22 +113,35 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    #server.send_text_message(user_ID,res)
+                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    server.send_text_message(user_ID,res)
                 else:
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
                     
-                    #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    #server.send_text_message(user_ID,res)
+                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                    server.send_text_message(user_ID,res)
                     ####send feed back
-                    #server.send_button_message(user_ID,feedback,button)
+                    server.send_button_message(user_ID,feedback,button)
                     
                 
-                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                 
-                server.send_text_message(user_ID,res)
+                #server.send_text_message(user_ID,res)
+                
+            elif message.get('postback'):
+                user_ID = message['sender']['id']
+                recipient_id = message["recipient"]["id"]
+                    
+                payload = message["postback"]["payload"]
+                if payload == 'It helps me!':
+                    res = 'Thank you for your use!'
+                    server.send_text_message(user_ID,res)
+                else:
+                    res = 'We will improve soon!'
+                    server.send_text_message(user_ID,res)
+                    
                 '''
                 
                 if re_ask == False:
