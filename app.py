@@ -86,10 +86,12 @@ def recieve_message():
                         response = 'See you soon!'
                         server.send_text_message(user_ID,response)
                         return "Message Processed"
+                    keyword = keyword_extract.keyword_extraction(intent,text)
                 else:
                     print(store[user_ID])
                     intent = store[user_ID]['re_intent']
-                keyword = keyword_extract.keyword_extraction(intent,text)
+                    keyword = store[user_ID]['keyword']
+                
                 response = retrieve.retrieval_func(keyword)
                 if response == 'Please provide courses code.':
                     
@@ -105,6 +107,7 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
+                        store[user_ID]['keyword'] = keyword
                         print(store[user_ID])
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
@@ -121,6 +124,7 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
+                        store[user_ID]['keyword'] = keyword
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 else:
