@@ -121,9 +121,9 @@ def recieve_message():
                     store[user_ID]['re_intent'] = ''
                     
                     res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    server.send_text_message(user_ID,res)
+                    #server.send_text_message(user_ID,res)
                     ####send feed back
-                    server.send_button_message(user_ID,feedback,button)
+                    server.send_button_message(user_ID,res,button)
                     
                 
                 #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
