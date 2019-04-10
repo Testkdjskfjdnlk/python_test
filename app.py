@@ -43,7 +43,7 @@ def verify_facebook():
         return request.args.get("hub.challenge")
     return 'Can not match Facebook verification!'
 
-button = [{'types':'postback', 'Title': 'Yes','payload': 'It helps me!'}, {'types':'postback', 'Title': 'No','payload': 'It does no help!'}]
+button = [{'type':'postback', 'title': 'Yes','payload': 'It helps me!'}, {'type':'postback', 'title': 'No','payload': 'It does no help!'}]
 feedback = 'Does this response help you?'
 
 #processing the message sent by user and return response searched by Chatbot
