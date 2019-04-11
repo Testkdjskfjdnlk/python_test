@@ -97,7 +97,7 @@ def recieve_message():
                     print('new reask text is '+ text)
                 
                 keyword = keyword_extract.keyword_extraction(intent,text)
-                print('keyword is ' + keyword)
+                print('keyword is ' + str(keyword))
                 
                 response = retrieve.retrieval_func(keyword)
                 print('data retrieve is '+response)
