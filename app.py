@@ -94,8 +94,10 @@ def recieve_message():
                     print(store[user_ID])
                     intent = store[user_ID]['re_intent']
                     text = store[user_ID]['input'] + ' ' + text
+                    print('new reask text is '+ text)
                 
                 keyword = keyword_extract.keyword_extraction(intent,text)
+                print('keyword is ' + keyword)
                 
                 response = retrieve.retrieval_func(keyword)
                 print('data retrieve is '+response)
