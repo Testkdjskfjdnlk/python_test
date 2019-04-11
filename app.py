@@ -54,9 +54,10 @@ def recieve_message():
     global store
     user_input = request.get_json()
     #get user ID to response back
-    for event in user_input['entry']:
-          messaging = event['messaging']
-          for message in messaging: 
+    if user_input.get('entry'):#for event in user_input['entry']:
+          event = user_input['entry'][0]
+          if event.get('messaging'):#for message in messaging:
+            message = event['messaging'][0]
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 
