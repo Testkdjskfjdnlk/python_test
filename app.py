@@ -111,6 +111,12 @@ def recieve_message():
                             response = retrieve.retrieval_func(keyword)
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                             server.send_button_message(user_ID,res,button)
+                        else:
+                            store[user_ID]['re_ask'] = True
+                            store[user_ID]['re_intent'] = intent
+                            
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
@@ -129,6 +135,12 @@ def recieve_message():
                             response = retrieve.retrieval_func(keyword)
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                             server.send_button_message(user_ID,res,button)
+                        else:
+                            store[user_ID]['re_ask'] = True
+                            store[user_ID]['re_intent'] = intent
+                            
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
