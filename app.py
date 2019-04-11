@@ -96,7 +96,7 @@ def recieve_message():
                     text = store[user_ID]['input'] + ' ' + text
                 
                 keyword = keyword_extract.keyword_extraction(intent,text)
-                store[user_ID]['keyword'] = keyword
+                
                 response = retrieve.retrieval_func(keyword)
                 print('data retrieve is '+response)
                 
@@ -114,13 +114,14 @@ def recieve_message():
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
+                            store[user_ID]['keyword'] = keyword
                             
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                        
+                        store[user_ID]['keyword'] = keyword
                         
                         print(store[user_ID])
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
@@ -138,13 +139,13 @@ def recieve_message():
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
-                            
+                            store[user_ID]['keyword'] = keyword
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
-                        
+                        store[user_ID]['keyword'] = keyword
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 else:
