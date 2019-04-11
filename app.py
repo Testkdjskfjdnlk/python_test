@@ -96,7 +96,9 @@ def recieve_message():
                     text = store[user_ID]['input'] + ' ' + text
                 
                 keyword = keyword_extract.keyword_extraction(intent,text)
+                store[user_ID]['keyword'] = keyword
                 response = retrieve.retrieval_func(keyword)
+                
                 if response == 'Please provide courses code.':
                     
                     if store[user_ID]['keyword']!={}:
@@ -111,6 +113,7 @@ def recieve_message():
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
+                        
                         
                         print(store[user_ID])
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
