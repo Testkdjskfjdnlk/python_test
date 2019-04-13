@@ -75,8 +75,9 @@ def recieve_message():
                         store[user_ID]['time'] = sent_time
                 
                 if store[user_ID]['re_ask'] == False:
-                    new_text = TextBlob(text).correct()
-                    new_text = str(new_text)
+                    new_text = intent_classify.preprocessing(text)
+                    #new_text = TextBlob(text).correct()
+                    #new_text = str(new_text)
                     intent = intent_classify.intent_classification(new_text)
                     
                     
