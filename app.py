@@ -17,9 +17,9 @@ import retrieve_data as retrieve
 import time
 
 
-facebook_verify = os.environ['facebook_verify'] #'we'   #the verify token
+facebook_verify = 'haha' #os.environ['facebook_verify'] #'we'   #the verify token
 ## may need change everytime
-access_token = os.environ['access_token']    #the access token
+access_token = 'EAAD1PpqbNz0BAE1C2ZAkvzg2eotZA66Ad3rQZAFKyX2WfOxNZBUQhLtFpIOlNuUyJwRzHLt5euP07q3bZAb1wKjCO5S5xSpqzp7lxVnq9XfLdqZCAT7KTmXsZC6NTW2l9d7VZBuIXAuFsxEQZCayYtn3bIHWCpnO0vIFom6uCZC2v5hgZDZD' #os.environ['access_token']    #the access token
 server = Bot(access_token)
 
 
@@ -208,23 +208,16 @@ def recieve_message():
                 '''
     return "Message Processed"
     
-'''
-#### send back message back to user
-def reply_user(user_ID,message):
-    
-    response = {
-        'recipient': {'id': user_ID},
-        'message': {'text': message}
-        }
-    send = request.post("https://graph.facebook.com/v2.6/me/messages?access_token=" + access_token, json = response)
-    
-    server.send_text_message(user_ID,message)
-    return 'ok'
-'''
+
+
+key_file = "/etc/letsencrypt/live/www.monsterko.ml/privkey.pem"
+cert_file = "/etc/letsencrypt/live/www.monsterko.ml/fullchain.pem"
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context.load_cert_chain(certfile = cert_file, keyfile = key_file)
 
 if __name__ == '__main__':
     #print(test_get_dynamodb())
-    app.run(debug=True)
+    app.run(ssl_context = context, host = '0.0.0.0', port = '55555',threaded = True,debug = True)
 
 
 
