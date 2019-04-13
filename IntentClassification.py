@@ -9,7 +9,7 @@ from sklearn import preprocessing
 from sklearn.externals import joblib
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-
+from keras import backend as K
 
 MAX_SEQUENCE_LENGTH = 50
 
@@ -82,7 +82,7 @@ def intent_classification(test_text):
         if item == test_predictions[0]:
             intent = index
             break
-    
+    K.clear_session()
     return intent
             
     
