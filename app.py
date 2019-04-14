@@ -25,7 +25,7 @@ server = Bot(access_token)
 
 # store the key info by user id
 global store
-store = {}   # store = {'id':{'input': '','re_intent':'','keyword':{}, 're_ask': Flase, 'time': float}}
+store = {}   # store = {'id':{'input': '','re_intent':'','keyword':{}, 're_ask': Flase, 'time': float, 'response':''}}
 
 
 
@@ -45,6 +45,9 @@ def verify_facebook():
 
 button = [{'type':'postback', 'title': 'It helps me!','payload': 'Yes'}, {'type':'postback', 'title': 'It does no help!','payload': 'No'}]
 
+continue_button = [{'type':'postback', 'title': 'I want continue.','payload': '1'}, {'type':'postback', 'title': 'I do not want continue.','payload': '0'}]
+
+intent_ bound = 0.5    ## least accuracy rate
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
 
@@ -66,11 +69,11 @@ def recieve_message():
                 
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time}
+                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
                     else:
                         store[user_ID]['time'] = sent_time
                 
@@ -78,17 +81,28 @@ def recieve_message():
                     new_text = intent_classify.preprocessing(text)
                     #new_text = TextBlob(text).correct()
                     #new_text = str(new_text)
-                    intent = intent_classify.intent_classification(new_text)
-                    
+                    intent = intent_classify.intent_classification(new_text)    ####  need return a accuracy
                     
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
-                        server.send_text_message(user_ID,response)
-                        return "Message Processed"
+                        if intent_acc <= intent_ bound:
+                            store[user_ID]['response'] = response
+                            res = 'We think your input may lead to wrong response, do you want continue?'
+                            server.send_button_message(user_ID, res, continue_button)
+                            return "Message Processed"
+                        else:
+                            server.send_text_message(user_ID,response)
+                            return "Message Processed"
                     elif intent == 'Goodbye':
                         response = 'See you soon!'
-                        server.send_text_message(user_ID,response)
-                        return "Message Processed"
+                        if intent_acc <= intent_ bound:
+                            store[user_ID]['response'] = response
+                            res = 'We think your input may lead to wrong response, do you want continue?'
+                            server.send_button_message(user_ID, res, continue_button)
+                            return "Message Processed"
+                        else:
+                            server.send_text_message(user_ID,response)
+                            return "Message Processed"
                     
                     store[user_ID]['input'] = text
                     
@@ -113,59 +127,85 @@ def recieve_message():
                             #print(store[user_ID]['keyword'])
                             keyword['course'] = store[user_ID]['keyword']['course']
                             response = retrieve.retrieval_func(keyword)
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                            server.send_button_message(user_ID,res,button)
+                            if intent_acc <= intent_ bound:
+                                store[user_ID]['response'] = response
+                                res = 'We think your input may lead to wrong response, do you want continue?'
+                                server.send_button_message(user_ID, res, continue_button)
+                            else:
+                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                server.send_button_message(user_ID,res,button)
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                            server.send_text_message(user_ID,res)
+                            if intent_acc <= intent_ bound:
+                                store[user_ID]['response'] = response
+                                res = 'We think your input may lead to wrong response, do you want continue?'
+                                server.send_button_message(user_ID, res, continue_button)
+                            else:
+                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        
-                        print(store[user_ID])
-                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                        server.send_text_message(user_ID,res)
+                        if intent_acc <= intent_ bound:
+                            store[user_ID]['response'] = response
+                            res = 'We think your input may lead to wrong response, do you want continue?'
+                            server.send_button_message(user_ID, res, continue_button)
+                        else:
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_text_message(user_ID,res)
                 elif response == 'please provide stream name.':
-                    print(store[user_ID])
+                    
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
                             store[user_ID]['keyword']['intent'] = intent
-                            #print(store[user_ID]['keyword'])
                             keyword['stream_name'] = store[user_ID]['keyword']['stream_name']
                             response = retrieve.retrieval_func(keyword)
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                            server.send_button_message(user_ID,res,button)
+                            if intent_acc <= intent_ bound:
+                                store[user_ID]['response'] = response
+                                res = 'We think your input may lead to wrong response, do you want continue?'
+                                server.send_button_message(user_ID, res, continue_button)
+                            else:
+                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                server.send_button_message(user_ID,res,button)
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                            server.send_text_message(user_ID,res)
+                            if intent_acc <= intent_ bound:
+                                store[user_ID]['response'] = response
+                                res = 'We think your input may lead to wrong response, do you want continue?'
+                                server.send_button_message(user_ID, res, continue_button)
+                            else:
+                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                        server.send_text_message(user_ID,res)
+                        if intent_acc <= intent_ bound:
+                            store[user_ID]['response'] = response
+                            res = 'We think your input may lead to wrong response, do you want continue?'
+                            server.send_button_message(user_ID, res, continue_button)
+                        else:
+                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            server.send_text_message(user_ID,res)
                 else:
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
-                    
-                    res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                    #server.send_text_message(user_ID,res)
-                    ####send feed back
-                    server.send_button_message(user_ID,res,button)
+                    if intent_acc <= intent_ bound:
+                        store[user_ID]['response'] = response
+                        res = 'We think your input may lead to wrong response, do you want continue?'
+                        server.send_button_message(user_ID, res, continue_button)
+                    else:
+                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                        ####send feed back
+                        server.send_button_message(user_ID,res,button)
                     
                 
-                #res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                
-                #server.send_text_message(user_ID,res)
                 
             elif message.get('postback'):
                 user_ID = message['sender']['id']
@@ -175,38 +215,23 @@ def recieve_message():
                 if payload == 'Yes':
                     res = 'Thank you for your use!'
                     server.send_text_message(user_ID,res)
-                else:
+                elif payload == 'No':
                     res = 'We will improve soon!'
                     server.send_text_message(user_ID,res)
+                elif payload == '1':   ### want continue
+                    res = store[user_ID]['response']
+                    if store[user_ID]['re_ask'] = False:
+                        server.send_button_message(user_ID,res,button)
+                    else:
+                        res = intent + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
+                        server.send_text_message(user_ID,res)
+                elif payload == '0':
+                    res = 'Please reinput with more details.'
+                    sent_time = time.time()
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
+                    server.send_text_message(user_ID,res)
                     
-                '''
-                
-                if re_ask == False:
-                    new_text = TextBlob(text).correct()
-                    new_text = str(new_text)
-                    intent = intent_classify.intent_classification(new_text)
-                    if intent == 'Greetings':
-                        response = 'Hi, I am here to help you!'
-                        reply_user(user_ID,response)
-                        return "Message Processed"
-                    elif intent == 'Goodbye':
-                        response = 'See you soon!'
-                        reply_user(user_ID,response)
-                        return "Message Processed"
-                else:
-                    intent = re_intent
-                keyword = keyword_extract.keyword_extraction(intent,text)
-                response = retrieve.retrieval_func(keyword)
-                if response == 'Please provide courses code.' or response == 'please provide stream name.': 
-                    re_ask = True
-                    re_intent = intent
-                else:
-                    re_ask = False
-                    re_intent = ''
-                res = intent + ' ' + response + ' ' + str(re_ask)
-                
-                reply_user(user_ID,res)
-                '''
+                    
     return "Message Processed"
     
 
