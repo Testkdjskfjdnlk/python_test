@@ -108,28 +108,31 @@ def basic_courses_info(epic1_return):
     for course in code_list:
         info += course + ' info are: \n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
-        if handbook != []:
-            info += 'Handbook link is: ' + items['handbook link'] +' \n'
-        if outline != []:
-            info += 'Outline link is: '+ items['outline link']+',' + 'outline is: ' + items['outline text']+' \n'
-        if timetable != []:
-            time_info = print_term_info('timetable',items['timetable'])
-            info += 'Time link is: ' + items['timetable link']+',' + 'timetable is: ' + time_info
-        if staff != []:
-            staff_info = print_term_info('staff',items['staff'])
-            info += 'staff is: '+ staff_info
-        if location != []:
-            loc_info = print_term_info('location',items['location'])
-            info += 'location is: '+loc_info
-        if related != []:
-            if items['prerequisite'] == 'N/a':
-                info += 'There is no prerequisite course'+ ' \n'
-            else:
-                info += items['prerequisite'] + ' \n'
-            if items['exclusion list'] == []:
-                info += 'There is no exclusion course'+ ' \n'
-            else:
-                info += ' '.join(items['prerequisite']) + ' \n'    
+        if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == []:
+            info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + items['outline text']+' \n'
+        else:
+            if handbook != []:
+                info += 'Handbook link is: ' + items['handbook link'] +' \n'
+            if outline != []:
+                info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + items['outline text']+' \n'
+            if timetable != []:
+                time_info = print_term_info('timetable',items['timetable'])
+                info += 'Time link is: ' + items['timetable link']+', ' + 'timetable is: ' + time_info
+            if staff != []:
+                staff_info = print_term_info('staff',items['staff'])
+                info += 'staff is: '+ staff_info
+            if location != []:
+                loc_info = print_term_info('location',items['location'])
+                info += 'location is: '+loc_info
+            if related != []:
+                if items['prerequisite'] == 'N/a':
+                    info += 'There is no prerequisite course.'+ ' \n'
+                else:
+                    info += 'Prerequisite course is: ' + items['prerequisite'] + ' \n'
+                if items['exclusion list'] == []:
+                    info += 'There is no exclusion course.'+ ' \n'
+                else:
+                    info += 'Exclusion course is: '+' '.join(items['prerequisite']) + ' \n'    
     return info
     
 ### stream rec
