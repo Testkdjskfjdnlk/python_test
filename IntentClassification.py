@@ -74,6 +74,7 @@ def intent_classification(test_text):
     
     #using intent classification model to classfy user input
     test_predictions_probas = model.predict([test_input])
+    max_prob = max(test_predictions_probas)
     test_predictions = test_predictions_probas.argmax(axis=-1)
     
     #find intent
@@ -83,7 +84,7 @@ def intent_classification(test_text):
             intent = index
             break
     K.clear_session()
-    return intent
+    return intent,max_prob
             
     
 
