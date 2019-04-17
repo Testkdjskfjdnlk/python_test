@@ -220,7 +220,7 @@ def recieve_message():
                     server.send_text_message(user_ID,res)
                 elif payload == '1':   ### want continue
                     res = store[user_ID]['response']
-                    if store[user_ID]['re_ask'] = False:
+                    if store[user_ID]['re_ask'] == False:
                         server.send_button_message(user_ID,res,button)
                     else:
                         res = intent + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
