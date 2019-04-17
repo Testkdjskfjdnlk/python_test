@@ -47,7 +47,7 @@ button = [{'type':'postback', 'title': 'It helps me!','payload': 'Yes'}, {'type'
 
 continue_button = [{'type':'postback', 'title': 'I want continue.','payload': '1'}, {'type':'postback', 'title': 'I do not want continue.','payload': '0'}]
 
-intent_ bound = 0.01    ## least accuracy rate
+intent_bound = 0.01    ## least accuracy rate
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
 
@@ -85,7 +85,7 @@ def recieve_message():
                     
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
-                        if intent_acc <= intent_ bound:
+                        if intent_acc <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -95,7 +95,7 @@ def recieve_message():
                             return "Message Processed"
                     elif intent == 'Goodbye':
                         response = 'See you soon!'
-                        if intent_acc <= intent_ bound:
+                        if intent_acc <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -127,7 +127,7 @@ def recieve_message():
                             #print(store[user_ID]['keyword'])
                             keyword['course'] = store[user_ID]['keyword']['course']
                             response = retrieve.retrieval_func(keyword)
-                            if intent_acc <= intent_ bound:
+                            if intent_acc <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -138,7 +138,7 @@ def recieve_message():
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            if intent_acc <= intent_ bound:
+                            if intent_acc <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -149,7 +149,7 @@ def recieve_message():
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        if intent_acc <= intent_ bound:
+                        if intent_acc <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -163,7 +163,7 @@ def recieve_message():
                             store[user_ID]['keyword']['intent'] = intent
                             keyword['stream_name'] = store[user_ID]['keyword']['stream_name']
                             response = retrieve.retrieval_func(keyword)
-                            if intent_acc <= intent_ bound:
+                            if intent_acc <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -174,7 +174,7 @@ def recieve_message():
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            if intent_acc <= intent_ bound:
+                            if intent_acc <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -185,7 +185,7 @@ def recieve_message():
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        if intent_acc <= intent_ bound:
+                        if intent_acc <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -196,7 +196,7 @@ def recieve_message():
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
-                    if intent_acc <= intent_ bound:
+                    if intent_acc <= intent_bound:
                         store[user_ID]['response'] = response
                         res = 'We think your input may lead to wrong response, do you want continue?'
                         server.send_button_message(user_ID, res, continue_button)
