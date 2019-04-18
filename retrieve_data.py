@@ -40,7 +40,7 @@ def graduate_req(epic1_return):
     code_list = epic1_return['course']
     
     if code_list == []:
-        return 'Please provide courses code.'
+        return 'Please provide valid courses code.'
     
     table = get_table()
     for course in code_list:
@@ -93,7 +93,7 @@ def print_term_info(label,term):
 def basic_courses_info(epic1_return):
     code_list = epic1_return['course']
     if code_list == []:
-        return 'Please provide courses code.'
+        return 'Please provide valid courses code.'
     
     info = ''
     handbook = epic1_return['handbook']
@@ -101,14 +101,15 @@ def basic_courses_info(epic1_return):
     outline = epic1_return['outline']
     staff = epic1_return['staff']     
     location = epic1_return['location']
-    related = epic1_return['related']    
+    related = epic1_return['related']
+    name = epic1_return['name']
     
     
     table = get_table()
     for course in code_list:
         info += course + ' info are: \n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
-        if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == []:
+        if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == [] and name == []:
             info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + items['outline text']+' \n'
         else:
             if handbook != []:
@@ -132,14 +133,16 @@ def basic_courses_info(epic1_return):
                 if items['exclusion list'] == []:
                     info += 'There is no exclusion course.'+ ' \n'
                 else:
-                    info += 'Exclusion course is: '+' '.join(items['prerequisite']) + ' \n'    
+                    info += 'Exclusion course is: '+' '.join(items['prerequisite']) + ' \n'
+            if name != []:
+                infor += 'Course name is ' + items['course name'] + ' \n'       
     return info
     
 ### stream rec
 def stream_courses_rec(epic1_return):
     stream_name = epic1_return['stream_name']
     if stream_name == []:
-        return 'please provide stream name.'
+        return 'please provide valid stream name.'
     
     code_list = epic1_return['course']
     
@@ -217,7 +220,7 @@ def clash_check(epic1_return):
     code_list = copy.copy(epic1_return['course'])
     
     if code_list == []:
-        return 'Please provide courses code.'
+        return 'Please provide valid courses code.'
     
     if len(code_list) < 2:
         return 'Ther is no clash for one course.'
