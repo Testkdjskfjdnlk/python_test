@@ -143,7 +143,7 @@ def basic_courses_info(epic1_return):
                 else:
                     info += 'Exclusion course is: '+' '.join(items['prerequisite']) + ' \n'
             if name != []:
-                infor += 'Course name is ' + items['course name'] + ' \n'       
+                info += 'Course name is ' + items['course name'] + ' \n'       
     return info
     
 ### stream rec
