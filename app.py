@@ -135,7 +135,7 @@ def recieve_message():
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
                                 res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                                if res > 999:
+                                if len(res) > 999:
                                     server.send_text_message(user_ID,res)
                                 else:
                                     server.send_button_message(user_ID,res,button)
@@ -174,7 +174,7 @@ def recieve_message():
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
                                 res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                                if res > 999:
+                                if len(res) > 999:
                                     server.send_text_message(user_ID,res)
                                 else:
                                     server.send_button_message(user_ID,res,button)
