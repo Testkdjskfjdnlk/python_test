@@ -110,7 +110,8 @@ def recieve_message():
                             server.send_text_message(user_ID,response)
                             return "Message Processed"
                     elif intent == 'Name':
-                        response = 'My name is KOBO.'
+                        name_response = ['My name is KOBO. :）','Please call me KOBO ~','I am KOBO ^^']
+                        response = random.choice(name_response)
                         if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
                             store[user_ID]['re_intent'] = intent
