@@ -8,6 +8,12 @@ def get_table():
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('Monster_DB')
     return table
+
+def cut_str(s):
+    a = s.find('.')
+    b = s[a+1:].find('.')
+    new_s = s[:a]+s[10:a+b+2]
+    return new_s
 '''
 stream = []
 course = []
@@ -110,12 +116,14 @@ def basic_courses_info(epic1_return):
         info += course + ' info are: \n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
         if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == [] and name == []:
-            info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + items['outline text']+' \n'
+            cut_outline = cut_str(items['outline text'])
+            info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +' \n'
         else:
             if handbook != []:
                 info += 'Handbook link is: ' + items['handbook link'] +' \n'
             if outline != []:
-                info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + items['outline text']+' \n'
+                cut_outline = cut_str(items['outline text'])
+                info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +' \n'
             if timetable != []:
                 time_info = print_term_info('timetable',items['timetable'])
                 info += 'Time link is: ' + items['timetable link']+', ' + 'timetable is: ' + time_info
