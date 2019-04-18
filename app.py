@@ -46,7 +46,7 @@ def verify_facebook():
 
 button = [{'type':'postback', 'title': 'It helps me!','payload': 'Yes'}, {'type':'postback', 'title': 'It does no help!','payload': 'No'}]
 
-continue_button = [{'type':'postback', 'title': 'I want continue.','payload': '1'}, {'type':'postback', 'title': 'I do not want continue.','payload': '0'}]
+continue_button = [{'type':'postback', 'title': 'I wanna continue.','payload': '1'}, {'type':'postback', 'title': 'Stop here.','payload': '0'}]
 
 intent_bound = 0.8    ## least accuracy rate
 #processing the message sent by user and return response searched by Chatbot
@@ -150,12 +150,8 @@ def recieve_message():
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
-                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                                if len(res) > 999:
-                                    server.send_text_message(user_ID,res)
-                                    #server.send_button_message(user_ID,'',button)
-                                else:
-                                    server.send_button_message(user_ID,res,button)
+                                res = response # + ' ' + str(store[user_ID]['re_ask'])
+                                server.send_button_message(user_ID,res,button)
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
@@ -165,7 +161,7 @@ def recieve_message():
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
-                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                res = response #+ ' ' + str(store[user_ID]['re_ask'])
                                 server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
@@ -176,9 +172,9 @@ def recieve_message():
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
                         else:
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            res = response # + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
-                elif response == 'please provide valid stream name.':
+                elif response == 'Please provide valid stream name.':
                     
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
@@ -190,11 +186,8 @@ def recieve_message():
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
-                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
-                                if len(res) > 999:
-                                    server.send_text_message(user_ID,res)
-                                else:
-                                    server.send_button_message(user_ID,res,button)
+                                res = response #+ ' ' + str(store[user_ID]['re_ask'])
+                                server.send_button_message(user_ID,res,button)
                         else:
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
@@ -204,7 +197,7 @@ def recieve_message():
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
                             else:
-                                res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                                res = response #+ ' ' + str(store[user_ID]['re_ask'])
                                 server.send_text_message(user_ID,res)
                     else:
                         store[user_ID]['re_ask'] = True
@@ -215,7 +208,7 @@ def recieve_message():
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
                         else:
-                            res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                            res = response #+ ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
                 else:
                     store[user_ID]['re_ask'] = False
@@ -226,13 +219,9 @@ def recieve_message():
                         res = 'We think your input may lead to wrong response, do you want continue?'
                         server.send_button_message(user_ID, res, continue_button)
                     else:
-                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                        res = response #+ ' ' + str(store[user_ID]['re_ask'])
                         ####send feed back
-                        if len(res) > 999:
-                            server.send_text_message(user_ID,res)
-                            #server.send_button_message(user_ID,'',button)
-                        else:
-                            server.send_button_message(user_ID,res,button)
+                        server.send_button_message(user_ID,res,button)
                     
                 
                 
@@ -253,13 +242,9 @@ def recieve_message():
                         if store[user_ID]['re_intent'] in ['Greetings','Goodbye','name']:
                             server.send_text_message(user_ID,res)
                         else:
-                            if len(res) > 999:
-                                server.send_text_message(user_ID,res)
-                                #server.send_button_message(user_ID,'',button)
-                            else:
-                                server.send_button_message(user_ID,res,button)
+                            server.send_button_message(user_ID,res,button)
                     else:
-                        res = store[user_ID]['re_intent'] + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
+                        #res = store[user_ID]['re_intent'] + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 elif payload == '0':
                     res = 'Please reinput with more details.'
