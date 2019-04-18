@@ -34,7 +34,7 @@ def keyword_extraction(intent,sentence):
     '''
     sentence = sentence.lower().replace("+", "#")
     print(sentence)
-    output = {'intent':intent,'course':[],'stream_name':[],'staff':[],'location':[],'time':[],'outline':[],'handbook':[],'related':[]}
+    output = {'intent':intent,'course':[],'stream_name':[],'staff':[],'location':[],'time':[],'outline':[],'handbook':[],'related':[],'name':[]}
     
     courses = load_csv('courses')
     #if intent == 'Stream course recommendation':
