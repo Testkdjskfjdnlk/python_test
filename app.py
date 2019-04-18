@@ -15,6 +15,7 @@ import keyword_extraction as keyword_extract
 import retrieve_data as retrieve
 
 import time
+import ssl
 
 
 facebook_verify = 'haha' #os.environ['facebook_verify'] #'we'   #the verify token
