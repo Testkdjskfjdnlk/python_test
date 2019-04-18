@@ -205,7 +205,7 @@ def recieve_message():
                     else:
                         res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         ####send feed back
-                        if len(res) > 1000:
+                        if len(res) > 999:
                             server.send_text_message(user_ID,res)
                         else:
                             server.send_button_message(user_ID,res,button)
