@@ -47,7 +47,7 @@ button = [{'type':'postback', 'title': 'It helps me!','payload': 'Yes'}, {'type'
 
 continue_button = [{'type':'postback', 'title': 'I want continue.','payload': '1'}, {'type':'postback', 'title': 'I do not want continue.','payload': '0'}]
 
-intent_bound = 0.01    ## least accuracy rate
+intent_bound = 0.4    ## least accuracy rate
 #processing the message sent by user and return response searched by Chatbot
 @app.route('/',methods = ['POST'])
 
@@ -204,7 +204,10 @@ def recieve_message():
                     else:
                         res = store[user_ID]['re_intent'] + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         ####send feed back
-                        server.send_button_message(user_ID,res,button)
+                        if len(res) > 1999:
+                            server.send_text_message(user_ID,res)
+                        else:
+                            server.send_button_message(user_ID,res,button)
                     
                 
                 
