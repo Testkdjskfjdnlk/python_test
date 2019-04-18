@@ -22,7 +22,8 @@ time = ['time','timetable','when']
 outline = ['outline']
 handbook = ['handbook']
 related = ['relative','related','prerequisite','co-related','correlated','exclusion','corequisite','condition']
-other = {'staff':staff,'location':location,'time':time,'outline':outline,'handbook':handbook,'related':related}
+name = ['course name','title','name']
+other = {'staff':staff,'location':location,'time':time,'outline':outline,'handbook':handbook,'related':related,'name':name}
 
 def keyword_extraction(intent,sentence):
     '''
