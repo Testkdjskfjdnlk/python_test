@@ -12,7 +12,7 @@ def get_table():
 def cut_str(s):
     a = s.find('.')
     b = s[a+1:].find('.')
-    new_s = s[:a]+s[10:a+b+2]
+    new_s = s[:a]+s[10:a+b+2] + ' ...'
     return new_s
 '''
 stream = []
@@ -113,44 +113,44 @@ def basic_courses_info(epic1_return):
     
     table = get_table()
     for course in code_list:
-        info += course + ' info are: \n'
+        info += '[' + course + ']\n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
         if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == [] and name == []:
             cut_outline = cut_str(items['outline text'])
-            info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +' \n'
+            info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +'.\n'
         else:
             if handbook != []:
-                info += 'Handbook link is: ' + items['handbook link'] +' \n'
+                info += 'Handbook link is: ' + items['handbook link'] +'.\n'
             if outline != []:
                 cut_outline = cut_str(items['outline text'])
-                info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +' \n'
+                info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +'.\n'
             if timetable != []:
                 time_info = print_term_info('timetable',items['timetable'])
                 info += 'Time link is: ' + items['timetable link']+', ' + 'timetable is: ' + time_info
             if staff != []:
                 staff_info = print_term_info('staff',items['staff'])
-                info += 'staff is: '+ staff_info
+                info += 'Staff is: '+ staff_info
             if location != []:
                 loc_info = print_term_info('location',items['location'])
-                info += 'location is: '+loc_info
+                info += 'Location is: '+loc_info
             if related != []:
                 if items['prerequisite'] == 'N/a':
-                    info += 'There is no prerequisite course.'+ ' \n'
+                    info += 'There is no prerequisite course.'+ '.\n'
                 else:
-                    info += 'Prerequisite course is: ' + items['prerequisite'] + ' \n'
+                    info += items['prerequisite'] + '.\n'
                 if items['exclusion list'] == []:
-                    info += 'There is no exclusion course.'+ ' \n'
+                    info += 'There is no exclusion course.'+ '.\n'
                 else:
-                    info += 'Exclusion course is: '+' '.join(items['prerequisite']) + ' \n'
+                    info += 'Exclusion course is: '+' '.join(items['prerequisite']) + '.\n'
             if name != []:
-                info += 'Course name is ' + items['course name'] + ' \n'       
+                info += 'Course name is ' + items['course name'] + '.\n'       
     return info
     
 ### stream rec
 def stream_courses_rec(epic1_return):
     stream_name = epic1_return['stream_name']
     if stream_name == []:
-        return 'please provide valid stream name.'
+        return 'Please provide valid stream name.'
     
     code_list = epic1_return['course']
     
@@ -159,11 +159,11 @@ def stream_courses_rec(epic1_return):
     if code_list == []:
         for stream in stream_name:
             courses_list = table.scan(FilterExpression = Attr('Course').eq(stream) & Attr('Function').eq('Specialisations'))['Items'][0]['stream courses list']
-            info += stream + ' has these courses that you can choose ' + ' '.join(courses_list) + '\n'
+            info += 'My recommendations for '+ stream + ' are: ' + ' '.join(courses_list) + '.\n'
     else:
         for stream in stream_name:
             courses_list = list(set(table.scan(FilterExpression = Attr('Course').eq(stream) & Attr('Function').eq('Specialisations'))['Items'][0]['stream courses list']) - set(code_list)) 
-            info += stream + ' has these courses that you can choose ' + ' '.join(courses_list) + '\n'
+            info += 'My recommendations for '+ stream + ' are: ' + ' '.join(courses_list) + '.\n'
     return info
     
  
@@ -244,10 +244,10 @@ def clash_check(epic1_return):
                 result = check_time(timetable[t],other_timetable[t])
                 if result != '':
                     info += course + ' and ' + other
-                    info += 'has clash in Term ' + t + ' in ' + result + '\n'
+                    info += ' has clash in Term ' + t + ' in ' + result + '.\n'
     if info == '':
         #print(epic1_return['course'])
-        info += 'There is no clash between ' + ' and '.join(epic1_return['course']) + '\n'
+        info += 'There is no time clash.\n'
     
     return info
     
