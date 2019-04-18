@@ -203,9 +203,9 @@ def recieve_message():
                         res = 'We think your input may lead to wrong response, do you want continue?'
                         server.send_button_message(user_ID, res, continue_button)
                     else:
-                        res = store[user_ID]['re_intent'] + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
+                        res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                         ####send feed back
-                        if len(res) > 1999:
+                        if len(res) > 1000:
                             server.send_text_message(user_ID,res)
                         else:
                             server.send_button_message(user_ID,res,button)
