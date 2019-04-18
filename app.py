@@ -135,7 +135,7 @@ def recieve_message():
                 response = retrieve.retrieval_func(keyword)
                 print('data retrieve is '+response)
                 
-                if response == 'Please provide courses code.':
+                if response == 'Please provide valid courses code.':
                     
                     if store[user_ID]['keyword']!={}:
                         print(store[user_ID])
@@ -177,7 +177,7 @@ def recieve_message():
                         else:
                             res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
-                elif response == 'please provide stream name.':
+                elif response == 'please provide valid stream name.':
                     
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
