@@ -85,13 +85,13 @@ def print_term_info(label,term):
                 info = info[:len(info)-1]
                 info += '\n'
             else:
-                info += 'Term '+ t + ' has not this course.\n'
+                info += 'Term '+ t + ' does not have this course.\n'
     else:
         for t in term.keys():
             if term[t] != 'N/a':
                 info += term[t] + ' in Term ' + t + '\n'
             else:
-                info += 'Term '+ t + ' has no this course.\n'
+                info += 'Term '+ t + ' does not have this course.\n'
     return info
 
 
@@ -139,11 +139,12 @@ def basic_courses_info(epic1_return):
                 else:
                     info += items['prerequisite'] + '.\n'
                 if items['exclusion list'] == []:
-                    info += 'There is no exclusion course.'+ '.\n'
+                    info += 'There is no exclusion course.'+ '\n'
                 else:
                     info += 'Exclusion course is: '+' '.join(items['prerequisite']) + '.\n'
             if name != []:
-                info += 'Course name is ' + items['course name'] + '.\n'       
+                info += 'Course name is ' + items['course name'] + '.\n'
+        info += '\n' 
     return info
     
 ### stream rec
