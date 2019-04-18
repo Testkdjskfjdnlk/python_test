@@ -69,11 +69,11 @@ def recieve_message():
                 
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
+                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     else:
                         store[user_ID]['time'] = sent_time
                 
@@ -81,11 +81,12 @@ def recieve_message():
                     new_text = intent_classify.preprocessing(text)
                     #new_text = TextBlob(text).correct()
                     #new_text = str(new_text)
-                    intent = intent_classify.intent_classification(new_text)    ####  need return a accuracy
+                    intent,intent_acc = intent_classify.intent_classification(new_text)    ####  need return a accuracy
+                    store[user_ID]['intent_acc'] = intent_acc
                     
                     if intent == 'Greetings':
                         response = 'Hi, I am here to help you!'
-                        if intent_acc <= intent_bound:
+                        if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -95,7 +96,7 @@ def recieve_message():
                             return "Message Processed"
                     elif intent == 'Goodbye':
                         response = 'See you soon!'
-                        if intent_acc <= intent_bound:
+                        if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -127,7 +128,7 @@ def recieve_message():
                             #print(store[user_ID]['keyword'])
                             keyword['course'] = store[user_ID]['keyword']['course']
                             response = retrieve.retrieval_func(keyword)
-                            if intent_acc <= intent_bound:
+                            if store[user_ID]['intent_acc'] <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -138,7 +139,7 @@ def recieve_message():
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            if intent_acc <= intent_bound:
+                            if store[user_ID]['intent_acc'] <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -149,7 +150,7 @@ def recieve_message():
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        if intent_acc <= intent_bound:
+                        if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -163,7 +164,7 @@ def recieve_message():
                             store[user_ID]['keyword']['intent'] = intent
                             keyword['stream_name'] = store[user_ID]['keyword']['stream_name']
                             response = retrieve.retrieval_func(keyword)
-                            if intent_acc <= intent_bound:
+                            if store[user_ID]['intent_acc'] <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -174,7 +175,7 @@ def recieve_message():
                             store[user_ID]['re_ask'] = True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
-                            if intent_acc <= intent_bound:
+                            if store[user_ID]['intent_acc'] <= intent_bound:
                                 store[user_ID]['response'] = response
                                 res = 'We think your input may lead to wrong response, do you want continue?'
                                 server.send_button_message(user_ID, res, continue_button)
@@ -185,7 +186,7 @@ def recieve_message():
                         store[user_ID]['re_ask'] = True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
-                        if intent_acc <= intent_bound:
+                        if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
@@ -196,7 +197,7 @@ def recieve_message():
                     store[user_ID]['re_ask'] = False
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
-                    if intent_acc <= intent_bound:
+                    if store[user_ID]['intent_acc'] <= intent_bound:
                         store[user_ID]['response'] = response
                         res = 'We think your input may lead to wrong response, do you want continue?'
                         server.send_button_message(user_ID, res, continue_button)
@@ -223,7 +224,7 @@ def recieve_message():
                     if store[user_ID]['re_ask'] == False:
                         server.send_button_message(user_ID,res,button)
                     else:
-                        res = intent + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
+                        res = store[user_ID]['re_intent'] + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
                 elif payload == '0':
                     res = 'Please reinput with more details.'
