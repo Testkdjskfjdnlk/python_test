@@ -152,7 +152,7 @@ def recieve_message():
                                 res = intent + ' ' + response + ' ' + str(store[user_ID]['re_ask'])
                                 if len(res) > 999:
                                     server.send_text_message(user_ID,res)
-                                    server.send_button_message(user_ID,'',button)
+                                    #server.send_button_message(user_ID,'',button)
                                 else:
                                     server.send_button_message(user_ID,res,button)
                         else:
@@ -229,7 +229,7 @@ def recieve_message():
                         ####send feed back
                         if len(res) > 999:
                             server.send_text_message(user_ID,res)
-                            server.send_button_message(user_ID,'',button)
+                            #server.send_button_message(user_ID,'',button)
                         else:
                             server.send_button_message(user_ID,res,button)
                     
@@ -252,7 +252,11 @@ def recieve_message():
                         if store[user_ID]['re_intent'] in ['Greetings','Goodbye','name']:
                             server.send_text_message(user_ID,res)
                         else:
-                            server.send_button_message(user_ID,res,button)
+                            if len(res) > 999:
+                                server.send_text_message(user_ID,res)
+                                #server.send_button_message(user_ID,'',button)
+                            else:
+                                server.send_button_message(user_ID,res,button)
                     else:
                         res = store[user_ID]['re_intent'] + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
