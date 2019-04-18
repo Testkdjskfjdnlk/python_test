@@ -86,9 +86,11 @@ def recieve_message():
                     store[user_ID]['intent_acc'] = intent_acc
                     
                     if intent == 'Greetings':
-                        response = 'Hi, I am here to help you!'
+                        greet_response = ['Hi, I am here to help you!', 'Hi nice to meet u!', 'Hey there, freshman!','Yo!','Hey, boo.']
+                        response = random.choice(greet_response)
                         if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
+                            store[user_ID]['re_intent'] = intent
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
                             return "Message Processed"
@@ -96,9 +98,22 @@ def recieve_message():
                             server.send_text_message(user_ID,response)
                             return "Message Processed"
                     elif intent == 'Goodbye':
-                        response = 'See you soon!'
+                        bye_response = ['See you soon!','Thanks!','ByeBye!','Thank you for choosing us!','I will miss you!']
+                        response = random.choice(bye_response)
                         if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
+                            store[user_ID]['re_intent'] = intent
+                            res = 'We think your input may lead to wrong response, do you want continue?'
+                            server.send_button_message(user_ID, res, continue_button)
+                            return "Message Processed"
+                        else:
+                            server.send_text_message(user_ID,response)
+                            return "Message Processed"
+                    elif intent == 'Name':
+                        response = 'My name is KOBO.'
+                        if store[user_ID]['intent_acc'] <= intent_bound:
+                            store[user_ID]['response'] = response
+                            store[user_ID]['re_intent'] = intent
                             res = 'We think your input may lead to wrong response, do you want continue?'
                             server.send_button_message(user_ID, res, continue_button)
                             return "Message Processed"
@@ -234,7 +249,10 @@ def recieve_message():
                 elif payload == '1':   ### want continue
                     res = store[user_ID]['response']
                     if store[user_ID]['re_ask'] == False:
-                        server.send_button_message(user_ID,res,button)
+                        if store[user_ID]['re_intent'] in ['Greetings','Goodbye','name']:
+                            server.send_text_message(user_ID,res)
+                        else:
+                            server.send_button_message(user_ID,res,button)
                     else:
                         res = store[user_ID]['re_intent'] + ' ' + res + ' ' + str(store[user_ID]['re_ask'])
                         server.send_text_message(user_ID,res)
