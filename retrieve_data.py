@@ -60,7 +60,7 @@ def graduate_req(epic1_return):
     info = ''
 
     if ADK_nb < 6:
-        info += 'No, you need more ' + str(6-ADK_nb)+' 6-units ADK courses to meet the graduation requirement.\n'
+        info += 'No, you need ' + str(6-ADK_nb)+' more 6-units ADK courses to meet the graduation requirement.\n'
         
     if total_units < 96:
         info += 'You also need to get '+str(96 - total_units)+' more units to meet the graduate requirement.\n'
@@ -179,11 +179,11 @@ def course_planning(epic1_return):
     for course in code_list:
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
         if items['prerequisite'] != 'N/a':
-            info += 'For ' + course + ' you can choose: '
+            info += 'For ' + course + ' you can choose, \n'
             info += items['prerequisite'] +'\n'
         else:
             if items['exclusion list'] != []:
-                info += 'For ' + course + ' you can choose: \n'
+                info += 'For ' + course + ' you can choose, \n'
                 info += 'Exclusions: ' + ' '.join(items['exclusion list']) + '\n'
             else:
                 info += 'There is no related course with ' + course + '\n'
