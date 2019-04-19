@@ -1,8 +1,5 @@
-import requests
-from bs4 import BeautifulSoup
-import boto3
-import json
 
+import boto3
 
 
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
