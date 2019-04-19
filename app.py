@@ -70,15 +70,16 @@ def recieve_message():
                 
                 sent_time = time.time()   ## current time
                 if user_ID not in store.keys():
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': 0, 'time': sent_time, 'intent_acc':0.0,'response':''}
                 else:
                     break_time = sent_time - store[user_ID]['time']
                     if break_time > 120:  # longer than 2 mins
-                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
+                        store[user_ID] = {'input': '', 're_intent':'','keyword':{}, 're_ask': 0, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     else:
                         store[user_ID]['time'] = sent_time
                 
-                if store[user_ID]['re_ask'] == False:
+                if store[user_ID]['re_ask'] == 0 or store[user_ID]['re_ask'] > 1:
+                    store[user_ID]['re_ask'] = 0
                     new_text = intent_classify.preprocessing(text)
                     #new_text = TextBlob(text).correct()
                     #new_text = str(new_text)
@@ -153,7 +154,7 @@ def recieve_message():
                                 res = response # + ' ' + str(store[user_ID]['re_ask'])
                                 server.send_button_message(user_ID,res,button)
                         else:
-                            store[user_ID]['re_ask'] = True
+                            store[user_ID]['re_ask'] += 1 #True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
                             if store[user_ID]['intent_acc'] <= intent_bound:
@@ -164,7 +165,7 @@ def recieve_message():
                                 res = response #+ ' ' + str(store[user_ID]['re_ask'])
                                 server.send_text_message(user_ID,res)
                     else:
-                        store[user_ID]['re_ask'] = True
+                        store[user_ID]['re_ask'] += 1 #True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
                         if store[user_ID]['intent_acc'] <= intent_bound:
@@ -174,7 +175,7 @@ def recieve_message():
                         else:
                             res = response # + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
-                elif response == 'Please provide valid stream name.':
+                elif response[(len(response)-43)] == 'Do you want query one specific stream name?':      # == 'Please provide valid stream name.':
                     
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
@@ -189,7 +190,7 @@ def recieve_message():
                                 res = response #+ ' ' + str(store[user_ID]['re_ask'])
                                 server.send_button_message(user_ID,res,button)
                         else:
-                            store[user_ID]['re_ask'] = True
+                            store[user_ID]['re_ask'] += 1 #True
                             store[user_ID]['re_intent'] = intent
                             store[user_ID]['keyword'] = keyword
                             if store[user_ID]['intent_acc'] <= intent_bound:
@@ -200,7 +201,7 @@ def recieve_message():
                                 res = response #+ ' ' + str(store[user_ID]['re_ask'])
                                 server.send_text_message(user_ID,res)
                     else:
-                        store[user_ID]['re_ask'] = True
+                        store[user_ID]['re_ask'] += 1   #True
                         store[user_ID]['re_intent'] = intent
                         store[user_ID]['keyword'] = keyword
                         if store[user_ID]['intent_acc'] <= intent_bound:
@@ -211,7 +212,7 @@ def recieve_message():
                             res = response #+ ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
                 else:
-                    store[user_ID]['re_ask'] = False
+                    store[user_ID]['re_ask'] = 0
                     store[user_ID]['keyword'] = keyword
                     store[user_ID]['re_intent'] = ''
                     if store[user_ID]['intent_acc'] <= intent_bound:
@@ -236,7 +237,7 @@ def recieve_message():
                 elif payload == 'No':
                     res = 'We will improve soon!'
                     sent_time = time.time()
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': 0, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     server.send_text_message(user_ID,res)
                 elif payload == '1':   ### want continue
                     res = store[user_ID]['response']
@@ -251,7 +252,7 @@ def recieve_message():
                 elif payload == '0':
                     res = 'Please reinput with more details.'
                     sent_time = time.time()
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': 0, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     server.send_text_message(user_ID,res)
                     
                     
