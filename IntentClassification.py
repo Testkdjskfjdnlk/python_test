@@ -51,6 +51,11 @@ def preprocessing(text):
     text = text.replace('recommendations', 'recommendation')
     text = text.replace('streams', 'stream')
     text = text.replace('specialisations','specialisation')
+    text = text.replace("what's", 'what is')
+    text = text.replace("you're", 'you are')
+    text = text.replace("i'm",'i am')
+    text = text.replace("where's", 'where is')
+    text = text.replace("who's", 'who is')
     return text
 
 
