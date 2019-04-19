@@ -231,10 +231,12 @@ def recieve_message():
                     
                 payload = message["postback"]["payload"]
                 if payload == 'Yes':
-                    res = 'Thank you for your use!'
+                    res = 'It is good to hear!'
                     server.send_text_message(user_ID,res)
                 elif payload == 'No':
                     res = 'We will improve soon!'
+                    sent_time = time.time()
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     server.send_text_message(user_ID,res)
                 elif payload == '1':   ### want continue
                     res = store[user_ID]['response']
@@ -249,7 +251,7 @@ def recieve_message():
                 elif payload == '0':
                     res = 'Please reinput with more details.'
                     sent_time = time.time()
-                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'response':''}
+                    store[user_ID] = {'input': '', 're_intent':'', 'keyword':{}, 're_ask': False, 'time': sent_time, 'intent_acc':0.0,'response':''}
                     server.send_text_message(user_ID,res)
                     
                     
