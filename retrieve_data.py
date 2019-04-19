@@ -241,7 +241,7 @@ def clash_check(epic1_return):
         return 'Please provide valid courses code.'
     
     if len(code_list) < 2:
-        return 'Ther is no clash for one course.'
+        return 'There is no clash for one course.'
     
     info = ''
     table = get_table()
