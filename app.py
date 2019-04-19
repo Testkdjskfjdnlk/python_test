@@ -175,7 +175,7 @@ def recieve_message():
                         else:
                             res = response # + ' ' + str(store[user_ID]['re_ask'])
                             server.send_text_message(user_ID,res)
-                elif response[(len(response)-43):] == 'Do you want query one specific stream name?':      # == 'Please provide valid stream name.':
+                elif response[(len(response)-39):] == 'Do you want query one specific stream name?':      # == 'Please provide valid stream name.':
                     
                     if store[user_ID]['keyword']!={}:
                         if store[user_ID]['keyword']['stream_name'] != []:
