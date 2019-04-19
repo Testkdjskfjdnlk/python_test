@@ -14,6 +14,12 @@ def cut_str(s):
     b = s[a+1:].find('.')
     new_s = s[:a]+s[10:a+b+2] + ' ...'
     return new_s
+
+def split_space(s):
+    l = list(s.split(' '))
+    len = 50
+    new_s = ' '.join(l[:len])
+    return new_s
 '''
 stream = []
 course = []
@@ -116,13 +122,13 @@ def basic_courses_info(epic1_return):
         info += '[' + course + ']\n'
         items = table.scan(FilterExpression = Attr('Course').eq(course) & Attr('Function').eq('Courses'))['Items'][0]
         if handbook == [] and outline == [] and timetable == [] and staff == [] and location == [] and related == [] and name == []:
-            cut_outline = cut_str(items['outline text'])
+            cut_outline = split_space(items['outline text'])
             info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +'.\n'
         else:
             if handbook != []:
                 info += 'Handbook link is: ' + items['handbook link'] +'.\n'
             if outline != []:
-                cut_outline = cut_str(items['outline text'])
+                cut_outline = split_space(items['outline text'])
                 info += 'Outline link is: '+ items['outline link']+', ' + 'outline is: ' + cut_outline +'.\n'
             if timetable != []:
                 time_info = print_term_info('timetable',items['timetable'])
