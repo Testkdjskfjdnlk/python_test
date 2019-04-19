@@ -87,7 +87,7 @@ def recieve_message():
                     store[user_ID]['intent_acc'] = intent_acc
                     
                     if intent == 'Greetings':
-                        greet_response = ['Hi, I am here to help you!', 'Hi nice to meet u!', 'Hey there, freshman!','Yo!','Hey, boo.']
+                        greet_response = ['Hi, I am here to help you!', 'Hi nice to meet u!', 'Hey there!','Yo!','Hey, boo!']
                         response = random.choice(greet_response)
                         if store[user_ID]['intent_acc'] <= intent_bound:
                             store[user_ID]['response'] = response
