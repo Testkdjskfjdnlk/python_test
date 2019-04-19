@@ -159,7 +159,7 @@ def stream_courses_rec(epic1_return):
     if stream_name == []:
         a = ['Artificial intelligence', 'Bioinformatics','Data science and engineering','Database systems','E-Commerce systems','Geospatial','Information technology','Internetworking']
         res = ' '.join(a)
-        s = 'CSE has these stream names: ' + res + ' .\n' + 'Do you want query one specific stream name?' 
+        s = 'CSE has these stream names: ' + res + '. ' + 'Do you want query one specific stream name?' 
         return s#'Please provide valid stream name.'
     
     code_list = epic1_return['course']
