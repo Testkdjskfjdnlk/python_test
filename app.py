@@ -13,6 +13,7 @@ from textblob import TextBlob
 import IntentClassification as intent_classify
 import keyword_extraction as keyword_extract
 import retrieve_data as retrieve
+import feedback
 
 import time
 import ssl
@@ -233,6 +234,7 @@ def recieve_message():
                 payload = message["postback"]["payload"]
                 if payload == 'Yes':
                     res = 'It is good to hear!'
+                    feedback.feedback(user_ID, store[user_ID]['input'], store[user_ID]['keyword']['intent'])
                     server.send_text_message(user_ID,res)
                 elif payload == 'No':
                     res = 'We will improve soon!'
