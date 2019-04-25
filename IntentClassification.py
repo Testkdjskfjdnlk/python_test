@@ -56,6 +56,7 @@ def preprocessing(text):
     text = text.replace("i'm",'i am')
     text = text.replace("where's", 'where is')
     text = text.replace("who's", 'who is')
+    text = text.strip()
     return text
 
 
